@@ -1,18 +1,19 @@
+// src/services/TokenServices/walletConfig.js
+
 import { Connection, clusterApiUrl } from '@solana/web3.js';
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
-import { PhantomWalletAdapter, SolletWalletAdapter } from '@solana/wallet-adapter-wallets';
-import { WalletProvider } from '@solana/wallet-adapter-react';
+import { PhantomWalletAdapter } from '@solana/wallet-adapter-wallets';
 
-// Configuración de la red Solana
-const network = WalletAdapterNetwork.Devnet; // Puedes cambiar a 'mainnet-beta' si estás listo para usar la Mainnet
+// Leer las variables de entorno para configurar la red y la URL RPC
+const network = import.meta.env.REACT_APP_SOLANA_NETWORK || WalletAdapterNetwork.Devnet;
+const rpcUrl = import.meta.env.REACT_APP_SOLANA_RPC_URL || clusterApiUrl('devnet');  // Asegúrate de usar `https://`
 
-// Conectar con Solana
-const connection = new Connection(clusterApiUrl(network), 'confirmed');
+// Crear la conexión a la red Solana
+const connection = new Connection(rpcUrl, 'confirmed');
 
-// Configurar billeteras compatibles
+// Configuración de las billeteras compatibles
 const wallets = [
   new PhantomWalletAdapter(),  // Phantom Wallet
-  new SolletWalletAdapter({ network }),  // Sollet Wallet (compatible con Solana Web Wallet)
 ];
 
 export { connection, wallets };
